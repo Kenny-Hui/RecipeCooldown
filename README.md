@@ -6,7 +6,7 @@ This is a simple Fabric mod that prevents excessive crafting recipe request from
 Tested on MC 1.17 - 1.19.
 
 ## Config
-By default, the mod will only allow the player to request a recipe every 100ms (This is usually enough to prevent excessive spamming).
+By default, the mod will only allow the player to request a recipe every 100ms (This is usually enough to prevent excessive spamming).  
 If you want other value for any reason, create a file called `recipe_cooldown.cfg` in the `config` folder, with a numeric value inside representing the timeout millisecond.
 
 ## License
