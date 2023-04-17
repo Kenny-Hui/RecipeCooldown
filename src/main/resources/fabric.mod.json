@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "recipecooldown",
+  "version": "${version}",
+
+  "name": "Recipe Cooldown",
+  "description": "Add a cooldown for player requesting crafting recipe to server",
+  "authors": [
+    "LX86"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/DistrictOfJoban/RecipeCooldown"
+  },
+
+  "license": "MIT",
+  "icon": "assets/recipecooldown/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.lx.recipecooldown.RecipeCooldown"
+    ]
+  },
+  "mixins": [
+    "recipecooldown.mixin.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.9",
+    "minecraft": ">=1.17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

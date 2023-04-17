@@ -1,0 +1,139 @@
+import groovy.json.JsonSlurper
+plugins {
+	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'maven-publish'
+	id "de.undercouch.download" version "4.1.2"
+}
+
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
+
+group = project.maven_group
+
+def default_minecraft_version = "1.19.2"
+def minecraft_version = project.properties.containsKey("buildVersion") ? project.getProperties().get("buildVersion") : default_minecraft_version
+def minecraft_major_version = minecraft_version.split("\\.")[0] as int // Always return 1, unless mojang goes haywire :P
+def minecraft_main_version = minecraft_version.split("\\.")[1] as int
+def mc_requirement = "${minecraft_major_version}.${minecraft_main_version}.x"
+def minecraft_minor_version = minecraft_version.split("\\.").size() > 2 ? minecraft_version.split("\\.")[2] as int : 0
+def minecraft_version_str = (minecraft_major_version as String) + (minecraft_main_version as String).padLeft(2, '0') + (minecraft_minor_version as String).padLeft(2, '0')
+def yarn_mappings = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/yarn/" + minecraft_version).toURL())[0]["version"]
+def loader_version = project.loader_version
+
+version = minecraft_version + "-" + project.mod_version
+
+repositories {
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
+}
+
+task downloadOptimizedMod() {
+	doLast {
+		def outputPath = "run/mods/"
+
+		download {
+			src getModrinthDLURL("fabric", minecraft_version, "lazydfu")
+			dest outputPath + "dfu.jar"
+			overwrite true
+		}
+		download {
+			src getModrinthDLURL("fabric", minecraft_version, "ferrite-core")
+			dest outputPath + "ferrite-core.jar"
+			overwrite true
+		}
+		download {
+			src getModrinthDLURL("fabric", minecraft_version, "smoothboot-fabric")
+			dest outputPath + "smooth-boot.jar"
+			overwrite true
+		}
+		download {
+			src getModrinthDLURL("fabric", minecraft_version, "ksyxis")
+			dest outputPath + "ksyxis.jar"
+			overwrite true
+		}
+	}
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${minecraft_version}"
+	mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+
+	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
+	// You may need to force-disable transitiveness on them.
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	// ensure that the encoding is set to UTF-8, no matter what the system default is
+	// this fixes some edge cases with special characters not displaying correctly
+	// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+	// If Javadoc is generated, this must be specified in that task too.
+	it.options.encoding = "UTF-8"
+
+	// Minecraft 1.17 (21w19a) upwards uses Java 16.
+	def targetVersion = 16
+	if (JavaVersion.current().isJava9Compatible()) {
+		 it.options.release = targetVersion
+	}
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	allprojects {
+		repositories {
+			maven {
+				url = "https://minecraft.guntram.de/maven/"
+			}
+			maven { url 'https://www.jitpack.io' }
+			maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+		}
+	}
+}
+
+static def getModrinthDLURL(loader, minecraftVersion, projectId) {
+	def versionsArray = new JsonSlurper().parse(("https://api.modrinth.com/v2/project/" + projectId + "/version").toURL())
+	for (def versionElement : versionsArray) {
+		if (versionElement["loaders"].contains(loader) && versionElement["game_versions"].contains(minecraftVersion)) {
+			return versionElement["files"][0]["url"].toURL()
+		}
+	}
+	return ""
+}
