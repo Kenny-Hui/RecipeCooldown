@@ -1,6 +1,6 @@
-package com.lx.recipecooldown;
+package com.lx862.recipecooldown;
 
-import com.lx.recipecooldown.Config.CooldownConfig;
+import com.lx862.recipecooldown.config.CooldownConfig;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

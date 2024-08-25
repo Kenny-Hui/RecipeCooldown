@@ -1,6 +1,6 @@
-package com.lx.recipecooldown.Config;
+package com.lx862.recipecooldown.config;
 
-import com.lx.recipecooldown.RecipeCooldown;
+import com.lx862.recipecooldown.RecipeCooldown;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.BufferedReader;
@@ -13,7 +13,7 @@ public class CooldownConfig {
     private static final Path CONFIG_PATH = Paths.get(FabricLoader.getInstance().getConfigDir().toString(), "recipe_cooldown.cfg");
     public static int timeoutMs = 100;
 
-    public static boolean load() {
+    public static void load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
                 BufferedReader brTest = new BufferedReader(new FileReader(CONFIG_PATH.toFile()));
@@ -22,7 +22,5 @@ public class CooldownConfig {
                 RecipeCooldown.LOGGER.info("[RecipeCooldown] Cooldown set to " + timeoutMs + "ms");
             } catch (Exception e) {}
         }
-
-        return true;
     }
 }

@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.lx.recipecooldown.RecipeCooldown"
+      "com.lx862.recipecooldown.RecipeCooldown"
     ]
   },
   "mixins": [
@@ -27,8 +27,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.9",
-    "minecraft": ">=1.17"
+    "fabricloader": ">=0.14.11",
+    "minecraft": ">=1.21"
   },
   "suggests": {
     "another-mod": "*"

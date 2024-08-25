@@ -1,7 +1,7 @@
-package com.lx.recipecooldown.mixin;
+package com.lx862.recipecooldown.mixin;
 
-import com.lx.recipecooldown.Config.CooldownConfig;
-import com.lx.recipecooldown.RecipeCooldown;
+import com.lx862.recipecooldown.config.CooldownConfig;
+import com.lx862.recipecooldown.RecipeCooldown;
 import net.minecraft.network.packet.c2s.play.CraftRequestC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
