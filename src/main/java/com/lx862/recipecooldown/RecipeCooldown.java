@@ -11,10 +11,14 @@ import java.util.UUID;
 public class RecipeCooldown implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("RecipeCooldown");
     public static final HashMap<UUID, Long> craftingCooldown = new HashMap<>();
+    private static CooldownConfig config;
 
     @Override
     public void onInitialize() {
-        LOGGER.info("[RecipeCooldown] RecipeCooldown loaded");
-        CooldownConfig.load();
+        config = new CooldownConfig();
+    }
+
+    public static CooldownConfig getConfig() {
+        return config;
     }
 }

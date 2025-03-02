@@ -1,6 +1,5 @@
 package com.lx862.recipecooldown.mixin;
 
-import com.lx862.recipecooldown.config.CooldownConfig;
 import com.lx862.recipecooldown.RecipeCooldown;
 import net.minecraft.network.packet.c2s.play.CraftRequestC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -17,8 +16,8 @@ public class ServerPlayNetworkHandlerMixin {
 
     @Inject(method = "onCraftRequest", at = @At("HEAD"), cancellable = true)
     public void onCraftRequestStart(CraftRequestC2SPacket packet, CallbackInfo ci) {
-        long tm = System.currentTimeMillis() - RecipeCooldown.craftingCooldown.getOrDefault(player.getUuid(), 0L);
-        if(tm <= CooldownConfig.timeoutMs) {
+        long cooldown = System.currentTimeMillis() - RecipeCooldown.craftingCooldown.getOrDefault(player.getUuid(), 0L);
+        if(cooldown <= RecipeCooldown.getConfig().getCooldownMs()) {
             ci.cancel();
         }
     }
