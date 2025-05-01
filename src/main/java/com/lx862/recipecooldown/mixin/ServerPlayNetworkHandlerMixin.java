@@ -17,7 +17,7 @@ public class ServerPlayNetworkHandlerMixin {
     @Inject(method = "onCraftRequest", at = @At("HEAD"), cancellable = true)
     public void onCraftRequestStart(CraftRequestC2SPacket packet, CallbackInfo ci) {
         long cooldown = System.currentTimeMillis() - RecipeCooldown.craftingCooldown.getOrDefault(player.getUuid(), 0L);
-        if(cooldown <= RecipeCooldown.getConfig().getCooldownMs()) {
+        if(cooldown <= RecipeCooldown.getConfig().getCooldownMillis()) {
             ci.cancel();
         }
     }

@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Recipe Cooldown",
-  "description": "Add a cooldown for player requesting crafting recipe to server",
+  "description": "Prevent recipe book spamming from taking down the server",
   "authors": [
     "LX86"
   ],
