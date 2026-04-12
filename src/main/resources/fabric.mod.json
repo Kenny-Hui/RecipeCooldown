@@ -3,14 +3,14 @@
   "id": "recipecooldown",
   "version": "${version}",
 
-  "name": "Recipe Cooldown",
+  "name": "RecipeCooldown",
   "description": "Prevent recipe book spamming from taking down the server",
   "authors": [
-    "LX86"
+    "AmberFrost"
   ],
   "contact": {
     "homepage": "",
-    "sources": "https://github.com/Kenny-Hui/RecipeCooldown"
+    "sources": "https://github.com/AmberIsFrozen/RecipeCooldown"
   },
 
   "license": "MIT",
@@ -27,7 +27,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.15.0",
-    "minecraft": ">=1.21"
+    "fabricloader": ">=0.16.0",
+    "minecraft": ">=26.1"
   }
 }
