@@ -4,7 +4,7 @@ plugins {
 }
 
 group = project.maven_group
-version = project.mod_version
+version = "${project.mod_version}+${project.minecraft_version}"
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
