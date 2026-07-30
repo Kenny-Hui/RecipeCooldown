@@ -9,7 +9,7 @@
     "AmberFrost"
   ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://github.com/AmberIsFrozen/RecipeCooldown",
     "sources": "https://github.com/AmberIsFrozen/RecipeCooldown"
   },
 
@@ -29,5 +29,8 @@
   "depends": {
     "fabricloader": ">=0.16.0",
     "minecraft": ">=26.1"
+  },
+  "suggests": {
+    "qomc": "*"
   }
 }

@@ -1,6 +1,7 @@
 package com.lx862.recipecooldown.mixin;
 
 import com.lx862.recipecooldown.RecipeCooldown;
+import com.lx862.recipecooldown.config.Config;
 import net.minecraft.network.protocol.game.ServerboundPlaceRecipePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -16,14 +17,18 @@ public class ServerPlayNetworkHandlerMixin {
 
     @Inject(method = "handlePlaceRecipe", at = @At("HEAD"), cancellable = true)
     public void onCraftRequestStart(ServerboundPlaceRecipePacket packet, CallbackInfo ci) {
+        if(!Config.INSTANCE.enabled.value()) return;
+
         long cooldown = System.currentTimeMillis() - RecipeCooldown.craftingCooldown.getOrDefault(player.getUUID(), 0L);
-        if(cooldown <= RecipeCooldown.getConfig().getCooldownMillis()) {
+        if(cooldown <= Config.INSTANCE.cooldownMs.value()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "handlePlaceRecipe", at = @At("TAIL"))
     public void onCraftRequest(ServerboundPlaceRecipePacket packet, CallbackInfo ci) {
+        if(!Config.INSTANCE.enabled.value()) return;
+
         RecipeCooldown.craftingCooldown.put(player.getUUID(), System.currentTimeMillis());
     }
 }
